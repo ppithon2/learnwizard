@@ -9,7 +9,10 @@
  */
 
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/paper-button/paper-button.js';
 import './shared-styles.js';
+
 
 class MyView1 extends PolymerElement {
   static get template() {
@@ -25,11 +28,31 @@ class MyView1 extends PolymerElement {
       <div class="card">
         <div class="circle">1</div>
         <h1>View One</h1>
+
+        <paper-textarea id="textarea" label="Coller ici les données"></paper-textarea>
+
+        <paper-button on-tap="tap_data1">Exemple</paper-button>
+
         <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
         <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
       </div>
     `;
   }
+
+  static get properties() {
+   return {
+     data1: {
+       type: String,
+       value: "toto"
+     }
+   }
+  }
+
+  tap_data1() {
+    console.log("ici !");
+    this.$.textarea.label = this.data1;
+  }
+
 }
 
 window.customElements.define('my-view1', MyView1);
