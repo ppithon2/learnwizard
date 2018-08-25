@@ -11,6 +11,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/iron-ajax/iron-ajax.js';
 import './shared-styles.js';
 
 
@@ -25,32 +26,68 @@ class MyView1 extends PolymerElement {
         }
       </style>
 
+      <iron-ajax id="ajaxcsv" handle-as="text" on-response="_onResponsecsv"></iron-ajax>
+
       <div class="card">
         <div class="circle">1</div>
-        <h1>View One</h1>
+        <h1>Data</h1>
 
-        <paper-textarea id="textarea" label="Coller ici les données"></paper-textarea>
+        <paper-textarea id="textarea" label="Past data here" value="{{sourcetxt}}"></paper-textarea>
 
         <paper-button on-tap="tap_data1">Exemple</paper-button>
 
-        <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-        <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
       </div>
     `;
   }
 
   static get properties() {
    return {
-     data1: {
+     sourcetxt: {
        type: String,
-       value: "toto"
+       observer: 'sourcetxtchange'
+     },
+     source: {
+       type: Object,
+       value: {},
+       notify:true
      }
    }
   }
 
   tap_data1() {
-    console.log("ici !");
-    this.$.textarea.label = this.data1;
+    this.$.ajaxcsv.url="src/data1.csv";
+    this.$.ajaxcsv.generateRequest();
+  }
+
+  _onResponsecsv(event, request) {
+    this.$.textarea.value = request.response;
+  }
+
+  sourcetxtchange(sourcetxt) {
+
+    this.set('source', this.convertTxtToOBJ(sourcetxt));
+
+  }
+
+  convertTxtToOBJ(sourcetxt) {
+    var obj={};
+    var rows=[];
+
+    var lines = sourcetxt.split('\n');
+    lines.forEach(function(value, index) {
+        var tab_value = value.split(',');
+        var row={};
+        row["question"]=tab_value[0];
+        var answers=[];
+        var answer={};
+        answer["value"] = tab_value[1];
+        answers.push(answer);
+        row["answers"]=answers;
+
+        rows.push(row);
+    }.bind(this));
+    obj["rows"] = rows;
+    return obj;
   }
 
 }
