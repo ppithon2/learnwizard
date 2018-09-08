@@ -24,8 +24,12 @@
     "@polymer/paper-input": "^3.0.0-pre.15",
     "@polymer/paper-button": "^3.0.0-pre.15",
     "@polymer/iron-ajax": "^3.0.0-pre.15",
+    "@polymer/iron-icons": "^3.0.0-pre.15",
+    "@polymer/iron-image": "^3.0.0-pre.15",
+    "@vaadin/vaadin-combo-box": "^4.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@webcomponents/webcomponentsjs": "^2.0.0"
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "papaparse": "^4.6.0"
   },
   "devDependencies": {
     "polymer-cli": "^1.7.1",

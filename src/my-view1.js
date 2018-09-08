@@ -14,7 +14,6 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import './shared-styles.js';
 
-
 class MyView1 extends PolymerElement {
   static get template() {
     return html`
@@ -34,6 +33,7 @@ class MyView1 extends PolymerElement {
 
         <paper-textarea id="textarea" label="Past data here" value="{{sourcetxt}}"></paper-textarea>
 
+        <paper-button on-tap="tap_data0">Exemple</paper-button>
         <paper-button on-tap="tap_data1">Exemple</paper-button>
 
       </div>
@@ -54,6 +54,11 @@ class MyView1 extends PolymerElement {
    }
   }
 
+  tap_data0() {
+    this.$.ajaxcsv.url="src/data0.csv";
+    this.$.ajaxcsv.generateRequest();
+  }
+
   tap_data1() {
     this.$.ajaxcsv.url="src/data1.csv";
     this.$.ajaxcsv.generateRequest();
@@ -70,24 +75,8 @@ class MyView1 extends PolymerElement {
   }
 
   convertTxtToOBJ(sourcetxt) {
-    var obj={};
-    var rows=[];
 
-    var lines = sourcetxt.split('\n');
-    lines.forEach(function(value, index) {
-        var tab_value = value.split(',');
-        var row={};
-        row["question"]=tab_value[0];
-        var answers=[];
-        var answer={};
-        answer["value"] = tab_value[1];
-        answers.push(answer);
-        row["answers"]=answers;
-
-        rows.push(row);
-    }.bind(this));
-    obj["rows"] = rows;
-    return obj;
+    return Papa.parse(sourcetxt).data;
   }
 
 }
