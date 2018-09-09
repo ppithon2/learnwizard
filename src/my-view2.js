@@ -31,7 +31,6 @@ class MyView2 extends PolymerElement {
       </style>
 
       <div class="card">
-          <div class="circle">2</div>
           <h1>Learn</h1>
 
           <paper-button on-tap="tapHiddenQuestion">hidden question</paper-button>
@@ -120,7 +119,7 @@ class MyView2 extends PolymerElement {
   play(e) {
 
     this.stop();
-    this.interval = setInterval(function(){ this.set('itemplay', this.itemplay+1); }.bind(this), 2000);
+    this.interval = setInterval(function(){ this.set('itemplay', this.itemplay+1); }.bind(this), 4000);
 
   }
 
@@ -132,9 +131,11 @@ class MyView2 extends PolymerElement {
   }
 
   getColorCard(row,itemplay,index) {
-    if (itemplay!=null && index==itemplay)
-      return "green";
-    else {
+    if (itemplay!=null && index==itemplay) {
+      this.$.voice.speak(row[0]);
+      this.$.voice.speak(row[1]);
+      return "#bbdefb";
+    } else {
       return "white";
     }
   }
@@ -144,6 +145,8 @@ class MyView2 extends PolymerElement {
   }
 
   sourcechange() {
+      this.set('sourcepart',[]);
+      this.top=0;
       this.next();
   }
 
