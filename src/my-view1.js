@@ -28,15 +28,20 @@ class MyView1 extends PolymerElement {
       <iron-ajax id="ajaxcsv" handle-as="text" on-response="_onResponsecsv"></iron-ajax>
 
       <div class="card">
-        <div class="circle">1</div>
-        <h1>Data</h1>
 
-        <paper-textarea id="textarea" label="Past data here" value="{{sourcetxt}}"></paper-textarea>
+        <h1>Data</h1>
 
         <paper-button on-tap="tap_data0">Exemple</paper-button>
         <paper-button on-tap="tap_data1">Exemple</paper-button>
 
       </div>
+
+      <div class="card">
+
+        <paper-textarea id="textarea" label="Past data here" value="{{sourcetxt}}"></paper-textarea>
+
+      </div>
+
     `;
   }
 
