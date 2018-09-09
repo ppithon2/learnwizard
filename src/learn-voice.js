@@ -19,7 +19,7 @@ class LearnVoice extends PolymerElement {
 
       </style>
 
-      <vaadin-combo-box label="Choix de la voix" items="[[listvoices]]" value="{{voiceSelect}}"></vaadin-combo-box>
+      <vaadin-combo-box label="Voice" items="[[listvoices]]" value="{{voiceSelect}}"></vaadin-combo-box>
 
     `;
   }
