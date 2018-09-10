@@ -19,7 +19,7 @@ import './shared-styles.js';
 import './learn-voice.js';
 
 
-class MyView2 extends PolymerElement {
+class LearnPlay extends PolymerElement {
   static get template() {
     return html`
       <style include="shared-styles iron-flex iron-flex-alignment">
@@ -172,4 +172,4 @@ class MyView2 extends PolymerElement {
 
 }
 
-window.customElements.define('my-view2', MyView2);
+window.customElements.define('learn-play', LearnPlay);

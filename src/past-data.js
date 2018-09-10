@@ -14,7 +14,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import './shared-styles.js';
 
-class MyView1 extends PolymerElement {
+class PastData extends PolymerElement {
   static get template() {
     return html`
       <style include="shared-styles">
@@ -29,7 +29,7 @@ class MyView1 extends PolymerElement {
 
       <div class="card">
 
-        <h1>Data</h1>
+        <h1>Past data</h1>
 
         <paper-button on-tap="tap_data0">Exemple</paper-button>
         <paper-button on-tap="tap_data1">Exemple</paper-button>
@@ -86,4 +86,4 @@ class MyView1 extends PolymerElement {
 
 }
 
-window.customElements.define('my-view1', MyView1);
+window.customElements.define('past-data', PastData);
