@@ -15,6 +15,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/av-icons.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import './flickr-image.js';
 import './shared-styles.js';
 import './learn-voice.js';
 
@@ -29,6 +30,8 @@ class LearnPlay extends PolymerElement {
           padding: 10px;
         }
       </style>
+
+
 
       <div class="card">
           <h1>Learn</h1>
@@ -50,8 +53,8 @@ class LearnPlay extends PolymerElement {
 
           <div class="card horizontal layout" style="background-color:[[getColorCard(row,itemplay,index)]]">
 
+            <flickr-image id="flickr" text="[[getFlickrText(row)]]"></flickr-image>
 
-            <iron-image src="[[getImage(row)]]" preload fade style="background-color: white"></iron-image>
 
             <div class="vertical layout" style="margin-left:15px">
 
@@ -140,10 +143,28 @@ class LearnPlay extends PolymerElement {
     }
   }
 
-  getImage(row) {
-      return "https://loremflickr.com/320/240/"+ row[1];
+  getFlickrText(row) {
+    console.log("row : " + row[1]);
+    return row[1];
   }
 
+
+/*  getImage(row) {
+console.log("ici : " + row);
+      var data = this.$.flickr.search("maison");
+
+      console.log("coucou : " +data.photos.photo[0]);
+      var firstphoto = data.photos.photo[0];
+      var url = "http://farm"+ firstphoto.farm +".staticflickr.com/"+ firstphoto.server+"/"+firstphoto.id+"_"+ firstphoto.secret +".jpg";
+      console.log("url : " + url);
+      console.log("row : " + row);
+
+      return url;
+
+      //return "https://loremflickr.com/320/240/"+ row[1] + "?lock=2";
+      //return "http://p-hold.com/320/240/"+ row[1];
+  }
+*/
   sourcechange() {
       this.set('sourcepart',[]);
       this.top=0;

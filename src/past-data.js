@@ -62,6 +62,14 @@ class PastData extends PolymerElement {
   tap_data0() {
     this.$.ajaxcsv.url="src/data0.csv";
     this.$.ajaxcsv.generateRequest();
+
+
+      let bar ;
+      this.foo().then( res => {
+          bar = res;
+          console.log(bar) // will print 'wohoo'
+      });
+      console.log("ici");
   }
 
   tap_data1() {
@@ -84,6 +92,16 @@ class PastData extends PolymerElement {
     return Papa.parse(sourcetxt).data;
   }
 
+
+  foo() {
+     return new Promise( (resolve, reject) => { // I want foo() to PROMISE me something
+      setTimeout ( function(){
+        // promise is RESOLVED , when execution reaches this line of code
+         resolve('wohoo')// After 1 second, RESOLVE the promise with value 'wohoo'
+      }, 1000 )
+    })
+  }
 }
+
 
 window.customElements.define('past-data', PastData);
