@@ -43,8 +43,8 @@ class FlickrImage extends PolymerElement {
 
      imageshistory: {
        type: Object,
-       value: {},
-       observer: '_search'
+       value: {}
+
      },
 
      text: {
@@ -63,13 +63,20 @@ class FlickrImage extends PolymerElement {
      }
 
 
-
-
-
    }
   }
 
-  _search(imageshistory) {
+  static get observers() {
+    return [
+      // Observer method name, followed by a list of dependencies, in parenthesis
+      '_search(imageshistory, text)'
+    ]
+  }
+
+  _search(imageshistory, text) {
+
+    if (imageshistory==null)
+      return;
 
     var url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=a8d37e137abece523bd5c1a1989a84e0&format=json&nojsoncallback=1&tags=" + this.text;
     this.$.ajaxflickr.url=url;
