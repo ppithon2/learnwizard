@@ -38,7 +38,7 @@ class PastData extends PolymerElement {
 
       <div class="card">
 
-        <paper-textarea id="textarea" label="Past data here" value="{{sourcetxt}}"></paper-textarea>
+        <paper-textarea id="textarea" label="Past data here" value="{{sourcetxt}}" rows="10"></paper-textarea>
 
       </div>
 

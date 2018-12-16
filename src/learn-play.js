@@ -64,7 +64,7 @@ class LearnPlay extends PolymerElement {
 
                 <br><br>
 
-                <span hidden$="[[hiddenResponse]]" class="answer">[[getAnswer(row)]]</span>
+                <span class="answer" on-click="tapResponse">[[getAnswer(row,hiddenResponse)]]</span>
                 <paper-icon-button icon="icons:record-voice-over" on-tap="speakAnswser"></paper-icon-button>
 
             </div>
@@ -112,8 +112,17 @@ class LearnPlay extends PolymerElement {
     return row[0];
   }
 
-  getAnswer(row) {
-    return row[1];
+  getAnswer(row, hiddenResponse) {
+     var length = row[1].length;
+
+     if (hiddenResponse)
+        return row[1].replace(/[^0-9]/g, ".");
+     else
+        return row[1];
+  }
+
+  tapResponse(event) {
+      event.target.innerText = event.model.row[1];
   }
 
   tapHiddenQuestion(e) {
