@@ -30,9 +30,10 @@ class FlickrImage extends PolymerElement {
         }
       </style>
 
-      <iron-ajax id="ajaxflickr" handle-as="json" last-response="{{data}}"></iron-ajax>
 
-      <iron-image id="ironimage" on-click="_tapimage" src="[[getImage(data)]]" preload fade style="background-color: white"></iron-image>
+      <iron-ajax id="ajaxflickr" handle-as="json" last-response="{{_data}}"></iron-ajax>
+
+      <iron-image height="250" width="400" id="ironimage" sizing="cover" on-click="_tapimage" src="[[getImage(_data)]]" preload fade style="background-color: white;cursor: pointer; "></iron-image>
 
     `;
   }
@@ -40,56 +41,66 @@ class FlickrImage extends PolymerElement {
   static get properties() {
    return {
 
-     text: {
-       type: String,
+     imageshistory: {
+       type: Object,
+       value: {},
        observer: '_search'
-
      },
 
-     data: {
+     text: {
+       type: String
+     },
+
+     _data: {
        type: Object
 
      },
 
-     numimage: {
+     _numimage: {
        type: Number,
        value: 0
 
      }
 
+
+
+
+
    }
   }
 
+  _search(imageshistory) {
 
-  _search(text) {
-
-    var url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=a8d37e137abece523bd5c1a1989a84e0&format=json&nojsoncallback=1&text=" + text;
-
+    var url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=a8d37e137abece523bd5c1a1989a84e0&format=json&nojsoncallback=1&tags=" + this.text;
     this.$.ajaxflickr.url=url;
     this.$.ajaxflickr.generateRequest();
 
   }
 
   getImage(dataimages) {
-    this.numimage = 0;
+    this._numimage = 0;
     return this.getNewImageHttp();
 
   }
 
   _tapimage(e) {
-    this.numimage = this.numimage + 1;
+    this._numimage = this._numimage + 1;
     var http =  this.getNewImageHttp();
     this.$.ironimage.src = http;
   }
 
   getNewImageHttp() {
 
-    var firstphoto = this.data.photos.photo[this.numimage];
+    if (this._numimage==0 && this.imageshistory[this.text]!=null)
+      return this.imageshistory[this.text];
+
+    var firstphoto = this._data.photos.photo[this._numimage];
     var url = "http://farm"+ firstphoto.farm +".staticflickr.com/"+ firstphoto.server+"/"+firstphoto.id+"_"+ firstphoto.secret +".jpg";
+
+    this.set('imageshistory.'+this.text, url);
 
     return url;
   }
-
 
 
 

@@ -15,6 +15,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/av-icons.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import '@polymer/app-storage/app-localstorage/app-localstorage-document.js';
 import './flickr-image.js';
 import './shared-styles.js';
 import './learn-voice.js';
@@ -31,6 +32,7 @@ class LearnPlay extends PolymerElement {
         }
       </style>
 
+      <app-localstorage-document key="learnwizard-images-history" data="{{imageshistory}}">
 
 
       <div class="card">
@@ -53,8 +55,7 @@ class LearnPlay extends PolymerElement {
 
           <div class="card horizontal layout" style="background-color:[[getColorCard(row,itemplay,index)]]">
 
-            <flickr-image id="flickr" text="[[getFlickrText(row)]]"></flickr-image>
-
+            <flickr-image id="flickr" text="[[getFlickrText(row)]]" imageshistory="{{imageshistory}}"></flickr-image>
 
             <div class="vertical layout" style="margin-left:15px">
 
@@ -90,6 +91,10 @@ class LearnPlay extends PolymerElement {
      sourcepart: {
        type: Array,
        value: []
+     },
+     imageshistory: {
+       type: Object,
+       value: {}
      }
 
    }
