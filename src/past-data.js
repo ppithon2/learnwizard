@@ -33,12 +33,13 @@ class PastData extends PolymerElement {
 
         <paper-button on-tap="tap_data0">Exemple</paper-button>
         <paper-button on-tap="tap_data1">Exemple</paper-button>
+        <paper-button on-tap="tap_data2">Exemple</paper-button>
 
       </div>
 
       <div class="card">
 
-        <paper-textarea id="textarea" label="Past data here" value="{{sourcetxt}}" rows="10"></paper-textarea>
+        <paper-textarea id="textarea" label="Past data here" value="{{_sourcetxt}}" rows="10"></paper-textarea>
 
       </div>
 
@@ -47,33 +48,36 @@ class PastData extends PolymerElement {
 
   static get properties() {
    return {
-     sourcetxt: {
-       type: String,
-       observer: 'sourcetxtchange'
+     _sourcetxt: {
+       type: String
+
      },
      source: {
        type: Object,
        value: {},
        notify:true
+     },
+     pagevisible: {
+       type: Boolean,
+       observer : '_pagevisiblechange'
      }
+
    }
   }
 
   tap_data0() {
-    this.$.ajaxcsv.url="src/data0.csv";
+    this.$.ajaxcsv.url="../csv/data0.csv";
     this.$.ajaxcsv.generateRequest();
 
-
-      let bar ;
-      this.foo().then( res => {
-          bar = res;
-          console.log(bar) // will print 'wohoo'
-      });
-      console.log("ici");
   }
 
   tap_data1() {
-    this.$.ajaxcsv.url="src/data1.csv";
+    this.$.ajaxcsv.url="../csv/data1.csv";
+    this.$.ajaxcsv.generateRequest();
+  }
+
+  tap_data2() {
+    this.$.ajaxcsv.url="../csv/data2.csv";
     this.$.ajaxcsv.generateRequest();
   }
 
@@ -81,26 +85,17 @@ class PastData extends PolymerElement {
     this.$.textarea.value = request.response;
   }
 
-  sourcetxtchange(sourcetxt) {
-
-    this.set('source', this.convertTxtToOBJ(sourcetxt));
-
-  }
-
   convertTxtToOBJ(sourcetxt) {
 
     return Papa.parse(sourcetxt).data;
   }
 
-
-  foo() {
-     return new Promise( (resolve, reject) => { // I want foo() to PROMISE me something
-      setTimeout ( function(){
-        // promise is RESOLVED , when execution reaches this line of code
-         resolve('wohoo')// After 1 second, RESOLVE the promise with value 'wohoo'
-      }, 1000 )
-    })
+  _pagevisiblechange(b) {
+    if (!b)
+      this.set('source', this.convertTxtToOBJ(this._sourcetxt));
   }
+
+
 }
 
 

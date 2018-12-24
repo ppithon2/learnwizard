@@ -21,6 +21,7 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/app-storage/app-localstorage/app-localstorage-document.js';
 import './my-icons.js';
 
 // Gesture events like tap and track generated from touch will not be
@@ -73,6 +74,8 @@ class LearnApp extends PolymerElement {
         }
       </style>
 
+      <app-localstorage-document key="learnwizard-images-history" data="{{imageshistory}}">
+
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
       </app-location>
 
@@ -100,9 +103,9 @@ class LearnApp extends PolymerElement {
             </app-toolbar>
           </app-header>
 
-          <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+          <iron-pages selected="[[page]]" attr-for-selected="name" role="main" selected-attribute="pagevisible">
             <past-data name="pastdata" source="{{source}}"></past-data>
-            <learn-play name="play" source="{{source}}"></learn-play>
+            <learn-play name="play" source="{{source}}" imageshistory="{{imageshistory}}"></learn-play>
             <my-view3 name="view3"></my-view3>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
@@ -119,7 +122,13 @@ class LearnApp extends PolymerElement {
         observer: '_pageChanged'
       },
       routeData: Object,
-      subroute: Object
+      subroute: Object,
+
+      imageshistory: {
+        type: Object,
+        value:{}
+      }
+
     };
   }
 
