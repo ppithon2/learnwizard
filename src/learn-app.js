@@ -22,6 +22,8 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/app-storage/app-localstorage/app-localstorage-document.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import './my-icons.js';
 
 // Gesture events like tap and track generated from touch will not be
@@ -100,12 +102,13 @@ class LearnApp extends PolymerElement {
             <app-toolbar>
               <paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
               <div main-title="">Happy Learn</div>
+              <paper-icon-button icon="[[_computeIconSettings(page)]]" on-tap="_tapsettings"></paper-icon-button>
             </app-toolbar>
           </app-header>
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main" selected-attribute="pagevisible">
-            <past-data name="pastdata" source="{{source}}"></past-data>
-            <learn-play name="play" source="{{source}}" imageshistory="{{imageshistory}}"></learn-play>
+            <past-data name="pastdata" source="{{source}}" toggle-settings="{{toggleSettings}}"></past-data>
+            <learn-play name="play" source="{{source}}" imageshistory="{{imageshistory}}" toggle-settings="{{toggleSettings}}"></learn-play>
             <my-view3 name="view3"></my-view3>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
@@ -127,7 +130,11 @@ class LearnApp extends PolymerElement {
       imageshistory: {
         type: Object,
         value:{}
-      }
+      },
+
+      toggleSettings: Boolean
+
+
 
     };
   }
@@ -177,6 +184,18 @@ class LearnApp extends PolymerElement {
         break;
     }
   }
+
+  _tapsettings(e) {
+   this.set('toggleSettings', !this.toggleSettings);
+  }
+
+  _computeIconSettings(page) {
+    if (page=="pastdata")
+      return "icons:help";
+    else if (page=="play")
+      return "record-voice-over";
+  }
+
 }
 
 window.customElements.define('learn-app', LearnApp);

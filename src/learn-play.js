@@ -29,27 +29,38 @@ class LearnPlay extends PolymerElement {
 
           padding: 10px;
         }
+
+        app-drawer-layout:not([narrow]) [drawer-toggle] {
+          display: none;
+        }
+
+        app-drawer {
+            --app-drawer-content-container: {
+              background-color:white;
+              text-align: left;
+            }
+        }
       </style>
 
 
+      <app-drawer-layout force-narrow >
+             <!-- Drawer content -->
+             <app-drawer id="drawer"  slot="drawer"  align="end">
+              
+               <app-toolbar>Options</app-toolbar>
+
+               <paper-button on-tap="tapHiddenQuestion">hidden question</paper-button>
+               <paper-button on-tap="tapHiddenAnswer">hidden answer</paper-button>
+
+               <learn-voice id="voice"> </learn-voice><br>
+
+               <paper-icon-button icon="av:play-circle-filled" on-tap="play"></paper-icon-button>
+               <paper-icon-button icon="av:stop" on-tap="stop"></paper-icon-button>
+
+             </app-drawer>
 
 
-      <div class="card">
-          <h1>Learn</h1>
-
-          <paper-button on-tap="tapHiddenQuestion">hidden question</paper-button>
-          <paper-button on-tap="tapHiddenAnswer">hidden answer</paper-button>
-
-          <learn-voice id="voice"> </learn-voice>
-
-          <paper-icon-button icon="av:play-circle-filled" on-tap="play"></paper-icon-button>
-          <paper-icon-button icon="av:stop" on-tap="stop"></paper-icon-button>
-
-      </div>
-
-
-
-        <template is="dom-repeat" items="[[sourcepart]]" as="row">
+        <template is="dom-repeat" items="[[_sourcepart]]" as="row">
 
 
           <div class="card horizontal layout" style="background-color:[[getColorCard(row,itemplay,index)]]">
@@ -76,6 +87,7 @@ class LearnPlay extends PolymerElement {
             <paper-button on-tap="next">Next</paper-button>
         </div>
 
+        </app-drawer-layout>
 
     `;
   }
@@ -87,12 +99,20 @@ class LearnPlay extends PolymerElement {
        type: Array,
        observer: 'sourcechange'
      },
-     sourcepart: {
+     _sourcepart: {
        type: Array,
        value: []
      },
      imageshistory: {
        type: Object
+
+     },
+     toggleSettings: {
+       type: Boolean,
+       observer: 'toggleSettingsChanged'
+     },
+     pagevisible: {
+       type: Boolean
 
      }
 
@@ -162,24 +182,8 @@ class LearnPlay extends PolymerElement {
   }
 
 
-/*  getImage(row) {
-console.log("ici : " + row);
-      var data = this.$.flickr.search("maison");
-
-      console.log("coucou : " +data.photos.photo[0]);
-      var firstphoto = data.photos.photo[0];
-      var url = "http://farm"+ firstphoto.farm +".staticflickr.com/"+ firstphoto.server+"/"+firstphoto.id+"_"+ firstphoto.secret +".jpg";
-      console.log("url : " + url);
-      console.log("row : " + row);
-
-      return url;
-
-      //return "https://loremflickr.com/320/240/"+ row[1] + "?lock=2";
-      //return "http://p-hold.com/320/240/"+ row[1];
-  }
-*/
   sourcechange() {
-      this.set('sourcepart',[]);
+      this.set('_sourcepart',[]);
       this.top=0;
       this.next();
   }
@@ -194,13 +198,18 @@ console.log("ici : " + row);
 
     for (var i=start;i<end;i++) {
 
-          this.push("sourcepart", JSON.parse(JSON.stringify(this.source[i])));
+          this.push("_sourcepart", JSON.parse(JSON.stringify(this.source[i])));
     }
     this.top=end;
-
-
   }
 
+ toggleSettingsChanged() {
+   if (!this.pagevisible)
+      return;
+
+    this.$.drawer.open();
+
+ }
 
 
 

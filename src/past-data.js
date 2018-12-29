@@ -17,31 +17,44 @@ import './shared-styles.js';
 class PastData extends PolymerElement {
   static get template() {
     return html`
-      <style include="shared-styles">
+      <style include="shared-styles iron-flex iron-flex-alignment">
         :host {
           display: block;
 
           padding: 10px;
         }
+
+        app-drawer {
+            --app-drawer-content-container: {
+              background-color:white;
+              text-align: left;
+            }
+        }
+
       </style>
 
       <iron-ajax id="ajaxcsv" handle-as="text" on-response="_onResponsecsv"></iron-ajax>
 
-      <div class="card">
+      <app-drawer-layout force-narrow >
+             <!-- Drawer content -->
+             <app-drawer id="drawer"  slot="drawer"  align="end">
 
-        <h1>Past data</h1>
+              <app-toolbar>Past data</app-toolbar>
 
-        <paper-button on-tap="tap_data0">Exemple</paper-button>
-        <paper-button on-tap="tap_data1">Exemple</paper-button>
-        <paper-button on-tap="tap_data2">Exemple</paper-button>
+              <paper-button on-tap="tap_data0">Exemple</paper-button><br>
+              <paper-button on-tap="tap_data1">Exemple</paper-button><br>
+              <paper-button on-tap="tap_data2">Exemple</paper-button><br>
 
-      </div>
 
-      <div class="card">
+            </app-drawer>
 
-        <paper-textarea id="textarea" label="Past data here" value="{{_sourcetxt}}" rows="10"></paper-textarea>
+        <div class="card">
 
-      </div>
+          <paper-textarea id="textarea" label="Past data here" value="{{_sourcetxt}}" rows="10"></paper-textarea>
+
+        </div>
+
+      </app-drawer-layout>
 
     `;
   }
@@ -56,6 +69,10 @@ class PastData extends PolymerElement {
        type: Object,
        value: {},
        notify:true
+     },
+     toggleSettings: {
+       type: Boolean,
+       observer: 'toggleSettingsChanged'
      },
      pagevisible: {
        type: Boolean,
@@ -93,6 +110,16 @@ class PastData extends PolymerElement {
   _pagevisiblechange(b) {
     if (!b)
       this.set('source', this.convertTxtToOBJ(this._sourcetxt));
+
+    if (b)
+        this.$.drawer.open();
+  }
+
+  toggleSettingsChanged() {
+    if (!this.pagevisible)
+       return;
+
+     this.$.drawer.open();
   }
 
 
