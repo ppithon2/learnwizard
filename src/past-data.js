@@ -111,8 +111,6 @@ class PastData extends PolymerElement {
     if (!b)
       this.set('source', this.convertTxtToOBJ(this._sourcetxt));
 
-    if (b)
-        this.$.drawer.open();
   }
 
   toggleSettingsChanged() {

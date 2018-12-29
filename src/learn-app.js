@@ -102,7 +102,11 @@ class LearnApp extends PolymerElement {
             <app-toolbar>
               <paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
               <div main-title="">Happy Learn</div>
+              <paper-icon-button icon="content-paste" on-tap="_tapPastData" title="past data"></paper-icon-button>
+              <paper-icon-button icon="motorcycle" on-tap="_tapPlay" title="play"></paper-icon-button>
               <paper-icon-button icon="[[_computeIconSettings(page)]]" on-tap="_tapsettings"></paper-icon-button>
+
+
             </app-toolbar>
           </app-header>
 
@@ -187,6 +191,13 @@ class LearnApp extends PolymerElement {
 
   _tapsettings(e) {
    this.set('toggleSettings', !this.toggleSettings);
+  }
+
+  _tapPastData(e) {
+    this.set('page', 'pastdata');
+  }
+  _tapPlay(e) {
+    this.set('page', 'play');
   }
 
   _computeIconSettings(page) {
