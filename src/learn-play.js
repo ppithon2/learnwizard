@@ -15,6 +15,8 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/av-icons.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import '@polymer/iron-list/iron-list.js';
+import '@polymer/iron-scroll-threshold/iron-scroll-threshold.js';
 import './flickr-image.js';
 import './shared-styles.js';
 import './learn-voice.js';
@@ -30,6 +32,8 @@ class LearnPlay extends PolymerElement {
           padding: 10px;
         }
 
+
+
         app-drawer-layout:not([narrow]) [drawer-toggle] {
           display: none;
         }
@@ -42,11 +46,13 @@ class LearnPlay extends PolymerElement {
         }
       </style>
 
+  <iron-scroll-threshold id="scrollTheshold" lower-threshold="100"  on-lower-threshold="_findMore" scroll-target="[[scrollTarget]]">
+  </iron-scroll-threshold>
 
       <app-drawer-layout force-narrow >
              <!-- Drawer content -->
              <app-drawer id="drawer"  slot="drawer"  align="end">
-              
+
                <app-toolbar>Options</app-toolbar>
 
                <paper-button on-tap="tapHiddenQuestion">hidden question</paper-button>
@@ -60,34 +66,34 @@ class LearnPlay extends PolymerElement {
              </app-drawer>
 
 
-        <template is="dom-repeat" items="[[_sourcepart]]" as="row">
+        <iron-list id="idlist" items="{{_list}}" as="row" scroll-target="[[scrollTarget]]">
+          <template>
+            <div> <!-- div wrapper pour iron-list sinon problem margin -->
+            
+              <div class="card horizontal layout" style="background-color:[[getColorCard(row,itemplay,index)]]">
 
+                <flickr-image id="flickr" text="[[getFlickrText(row)]]" imageshistory="{{imageshistory}}"></flickr-image>
 
-          <div class="card horizontal layout" style="background-color:[[getColorCard(row,itemplay,index)]]">
+                <div class="vertical layout" style="margin-left:15px">
 
-            <flickr-image id="flickr" text="[[getFlickrText(row)]]" imageshistory="{{imageshistory}}"></flickr-image>
+                    <span hidden$="[[hiddenQuestion]]" class="question"><b>[[getQuestion(row)]]</b></span>
+                    <paper-icon-button icon="icons:record-voice-over" on-tap="speakQuestion"></paper-icon-button>
 
-            <div class="vertical layout" style="margin-left:15px">
+                    <br><br>
 
-                <span hidden$="[[hiddenQuestion]]" class="question"><b>[[getQuestion(row)]]</b></span>
-                <paper-icon-button icon="icons:record-voice-over" on-tap="speakQuestion"></paper-icon-button>
+                    <span class="answer" on-click="tapResponse">[[getAnswer(row,hiddenResponse)]]</span>
+                    <paper-icon-button icon="icons:record-voice-over" on-tap="speakAnswser"></paper-icon-button>
 
-                <br><br>
+                </div>
 
-                <span class="answer" on-click="tapResponse">[[getAnswer(row,hiddenResponse)]]</span>
-                <paper-icon-button icon="icons:record-voice-over" on-tap="speakAnswser"></paper-icon-button>
-
+              </div>
             </div>
+          </template>
+        </iron-list>
 
-          </div>
-
-        </template>
-
-        <div class="card horizontal layout" >
-            <paper-button on-tap="next">Next</paper-button>
-        </div>
 
         </app-drawer-layout>
+
 
     `;
   }
@@ -99,7 +105,7 @@ class LearnPlay extends PolymerElement {
        type: Array,
        observer: 'sourcechange'
      },
-     _sourcepart: {
+     _list: {
        type: Array,
        value: []
      },
@@ -114,7 +120,8 @@ class LearnPlay extends PolymerElement {
      pagevisible: {
        type: Boolean
 
-     }
+     },
+     scrollTarget: HTMLElement
 
    }
   }
@@ -183,24 +190,13 @@ class LearnPlay extends PolymerElement {
 
 
   sourcechange() {
-      this.set('_sourcepart',[]);
-      this.top=0;
-      this.next();
-  }
 
-  next() {
-
-    if (this.top==null)
-      this.top=0;
-
-    var start = this.top;
-    var end = this.top + 10;
-
-    for (var i=start;i<end;i++) {
-
-          this.push("_sourcepart", JSON.parse(JSON.stringify(this.source[i])));
+    if (this._list.length>0) {
+      this.splice("_list", 0, this._list.length);
+      this._findMore();
     }
-    this.top=end;
+
+
   }
 
  toggleSettingsChanged() {
@@ -211,6 +207,26 @@ class LearnPlay extends PolymerElement {
 
  }
 
+_findMore() {
+
+  var start = this._list.length;
+  var end = start + 10;
+
+  for (var i=start;i<end;i++) {
+
+        if (i>=this.source.length)
+          break;
+
+        this.push("_list", JSON.parse(JSON.stringify(this.source[i])));
+  }
+
+  this.$.scrollTheshold.clearTriggers();
+
+  this.$.idlist.notifyResize();
+
+  console.log("find more...");
+
+}
 
 
 }

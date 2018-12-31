@@ -49,6 +49,18 @@ class LearnApp extends PolymerElement {
           display: none;
         }
 
+        app-header-layout {
+               position: absolute;
+               top: 0px;
+               right:0px;
+               bottom: 0px;
+               left: 0px;
+               height: 100%;
+               background-color: #eee;
+               overflow: hidden;
+               box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+             }
+
         app-header {
           color: #fff;
           background-color: var(--app-primary-color);
@@ -84,11 +96,11 @@ class LearnApp extends PolymerElement {
       <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
       </app-route>
 
-
+      <app-header-layout id="appheaderlayout" has-scrolling-region="">
 
           <app-header slot="header" condenses="" reveals="" effects="waterfall">
             <app-toolbar>
-            
+
               <div main-title="">Happy Learn</div>
               <paper-icon-button icon="content-paste" on-tap="_tapPastData" title="past data"></paper-icon-button>
               <paper-icon-button icon="motorcycle" on-tap="_tapPlay" title="play"></paper-icon-button>
@@ -100,10 +112,12 @@ class LearnApp extends PolymerElement {
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main" selected-attribute="pagevisible">
             <past-data name="pastdata" source="{{source}}" toggle-settings="{{toggleSettings}}"></past-data>
-            <learn-play name="play" source="{{source}}" imageshistory="{{imageshistory}}" toggle-settings="{{toggleSettings}}"></learn-play>
+            <learn-play name="play" source="{{source}}" imageshistory="{{imageshistory}}" toggle-settings="{{toggleSettings}}" scroll-target="[[scrollTarget]]"></learn-play>
             <my-view3 name="view3"></my-view3>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
+
+      </app-header-layout>
 
     `;
   }
@@ -123,7 +137,8 @@ class LearnApp extends PolymerElement {
         value:{}
       },
 
-      toggleSettings: Boolean
+      toggleSettings: Boolean,
+      scrollTarget: HTMLElement
 
 
 
@@ -136,6 +151,11 @@ class LearnApp extends PolymerElement {
     ];
   }
 
+  ready() {
+    super.ready();
+    this.set('scrollTarget',  this._getScrollTarget());
+
+  }
   _routePageChanged(page) {
      // Show the corresponding page according to the route.
      //
@@ -189,6 +209,10 @@ class LearnApp extends PolymerElement {
       return "icons:help";
     else if (page=="play")
       return "record-voice-over";
+  }
+
+  _getScrollTarget() {
+    return this.$.appheaderlayout.$.contentContainer;
   }
 
 }
